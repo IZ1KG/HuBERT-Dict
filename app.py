@@ -1,5 +1,5 @@
 # Copyright (c) 2025 Itzik Galanti. All rights reserved.
-# View-only. No use/copy/modify/distribute without written permission.
+# Personal Use — No Modification / No Redistribution. View-only; no use/copy/modify/distribute without written permission.
 
 
 #!/usr/bin/env python3
@@ -320,4 +320,4 @@ if __name__ == "__main__":
 
 
 # Copyright (c) 2025 Itzik Galanti. All rights reserved.
-# View-only. No use/copy/modify/distribute without written permission.
+# Personal Use — No Modification / No Redistribution. View-only; no use/copy/modify/distribute without written permission.
