@@ -1,0 +1,58 @@
+Personal Use License — No Modification / No Redistribution
+Version 1.0 — 2025-11-02
+
+Copyright (c) 2025 Itzik Galanti. All rights reserved.
+
+1. Grant of License
+   Subject to your full and ongoing compliance with this License, the copyright holder
+   grants you a limited, non-exclusive, non-transferable, revocable license to
+   download, install, and use the Software solely for your own internal, personal or
+   evaluation use. No other rights are granted.
+
+2. Restrictions
+   You shall not, and shall not permit any third party to:
+   (a) copy, reproduce, mirror, or host the Software or any part thereof, except as
+       strictly necessary to load and run it on your own device(s);
+   (b) modify, adapt, translate, create derivative works of, or reverse engineer the
+       Software, except to the limited extent that applicable law prohibits such
+       restrictions;
+   (c) publish, distribute, sublicense, sell, rent, lease, lend, or otherwise make the
+       Software available to any third party, including by providing it as a service
+       or incorporating it into any service or product;
+   (d) remove or alter any proprietary notices, attribution, or copyright statements.
+
+3. Ownership
+   The Software is licensed, not sold. The copyright holder retains all right, title,
+   and interest in and to the Software and all copies thereof.
+
+4. Term and Termination
+   This License is effective upon your first access to the Software and continues
+   until terminated. The copyright holder may terminate this License at any time if
+   you breach any term herein. Upon termination, you must immediately cease all use
+   of the Software and destroy all copies in your possession or control.
+
+5. No Warranty
+   THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND TITLE. YOUR USE OF THE
+   SOFTWARE IS AT YOUR SOLE RISK.
+
+6. Limitation of Liability
+   TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL THE COPYRIGHT HOLDER BE
+   LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE
+   DAMAGES, OR ANY LOSS OF PROFITS, REVENUE, DATA, OR GOODWILL, ARISING OUT OF OR IN
+   CONNECTION WITH THIS LICENSE OR THE USE OF THE SOFTWARE, WHETHER IN CONTRACT, TORT,
+   STRICT LIABILITY, OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+7. Third-Party Components
+   The Software may incorporate components licensed from third parties (e.g., PyTorch,
+   HuggingFace Transformers, etc.). Such components are subject to their respective
+   licenses, which shall govern your use of those components.
+
+8. Governing Law and Venue
+   If required by law, disputes will be governed by the laws of your local jurisdiction
+   unless otherwise specified in writing by the copyright holder.
+
+9. Entire Agreement
+   This License constitutes the entire agreement between you and the copyright holder
+   regarding the Software and supersedes any prior or contemporaneous understandings.
