@@ -7,128 +7,81 @@
 > **Language note (Hebrew-first):** This project is configured and documented primarily for **Hebrew** usage (labels, examples, CLI output).  
 > The acoustic matcher itself is language-agnostic, but provided flows and examples target **Hebrew caregiving contexts**.
 
-
 ---
 
-## ✨ Features
-- 🎙️ Live microphone recognition (fixed window) + optional **voice-trigger with pre-roll** (avoid missed openings)
-- 👤 Per-child local JSON storage (privacy by default)
-- 🧠 Simple, fast matcher: HuBERT → vector → compare to word profiles with clear acceptance rules
-- 🛠️ CLI-first workflow: add words, listen, list, delete, reset—no GUI needed
-- 🧩 Cross-platform: Windows / Linux / macOS
+## ✨ What this build includes
+This README matches the **minimal CLI** in `app.py` you shared:
+- `add-word` — record N short examples for a label and build/update its profile
+- `listen` — continuous fixed-window listening and classification
+- Default window: **2.0s**; default mic sensitivity: **high**
+- Per‑child JSON auto‑created as `child_<id>.json` (no folders to set up)
+
+> Not included in this build: voice‑trigger / pre‑roll, list/delete commands, unknown logging.  
+> JSON version used here: **simple-1.0**.
 
 ---
 
 ## 🔧 Requirements
 - **Python 3.9+**
-- Python packages: `torch`, `transformers`, `librosa`, `sounddevice`, `soundfile`, `numpy`
-- Audio backend (Linux only):
-  ```bash
-  sudo apt-get update
-  sudo apt-get install -y libportaudio2 libsndfile1
-  ```
+- Python packages: `torch`, `transformers`, `librosa`, `sounddevice`, `numpy`  
+  (Optional but harmless in `requirements.txt`: `soundfile`)
+
+Linux audio backend (if needed):
+```bash
+sudo apt-get update
+sudo apt-get install -y libportaudio2 libsndfile1
+```
 > HuBERT runs on **CPU**. First run downloads the model to your local HuggingFace cache.  
 > **Windows UTF-8 tip:** If Hebrew text looks garbled, use a modern PowerShell or run `chcp 65001`.
 
 ---
 
-## 🚀 Installation (reviewers with permission)
+## 🚀 Installation
 ```bash
-# Clone
 git clone https://github.com/IZ1KG/HuBERT-Dict.git
 cd HuBERT-Dict
 
-# Virtual env
 python -m venv .venv
 # Windows:
 .venv\Scripts\activate
 # Linux/macOS:
 # source .venv/bin/activate
 
-# Dependencies
 pip install --upgrade pip
-pip install torch transformers librosa sounddevice soundfile numpy
+pip install torch transformers librosa sounddevice numpy
+# (optional) pip install soundfile
 ```
 
-Optional: list audio devices to find your mic index
+List audio devices (optional):
 ```bash
 python -c "import sounddevice as sd; print(sd.query_devices())"
 ```
 
 ---
 
-## ⚙️ Quick Start (with permission)
-**Add a word (collect 5 examples)** — defaults: `--seconds 2.0`, `--sensitivity high`
+## ⚙️ Quick Start
+**Train a word (collect 5 examples)** — defaults: `--seconds 2.0`, `--sensitivity high`
 ```bash
 python app.py add-word --child 1 --label "מים" -n 5
 ```
 
-**Live recognition**
+**Live recognition (continuous windows)**
 ```bash
 python app.py listen --child 1
 ```
-
-**Voice-trigger mode (optional)**
-```bash
-python app.py listen --child 1 --voice-trigger --preroll-ms 400 --verbose
-```
-
----
-
-## 🧪 CLI Usage
-### Add samples (train a word)
-```bash
-# New word with 5 samples
-python app.py add-word --child 1 --label "טיול" -n 5
-
-# Add more samples later (improves robustness)
-python app.py add-word --child 1 --label "טיול" -n 3
-
-# Re-record from scratch (keeps the label, wipes old samples)
-python app.py add-word --child 1 --label "טיול" --reset-first -n 5
-```
-
-### Live listen / predict
-```bash
-# Basic
-python app.py listen --child 1
-
-# Use a specific mic device (see index from 'list devices')
-python app.py listen --child 1 --device 2
-
-# Voice-trigger with pre-roll
-python app.py listen --child 1 --voice-trigger --preroll-ms 400 --verbose
-```
-
-### Manage dictionary
-```bash
-# List words and stats
-python app.py list-words --child 1
-
-# Delete a word
-python app.py delete-word --child 1 --label "טיול"
-```
-
-### Sensitivity (microphone loudness)
-- Presets: `--sensitivity low|med|high|ultra` (default `high`)
-- Or explicit RMS threshold: `--rms-min 0.002`
-
-Examples:
-```bash
-python app.py listen --child 1 --sensitivity ultra
-python app.py add-word --child 1 --label "מים" -n 5 --rms-min 0.002
-```
+Options:
+- `--seconds 2.0` — fixed window length (seconds)  
+- `--sensitivity low|med|high|ultra` (default `high`) or `--rms-min <float>`  
+- `--device <index/name>` — specific microphone device
+- `--pause 0.1` — short sleep between windows
 
 ---
 
 ## 🧠 How It Works (high level)
-1. **Record** a short mic window (default 2.0s). Optional **voice-trigger** waits for speech and includes ~400 ms **pre-roll**.  
-2. **Preprocess** audio: trim silence, check minimum loudness (RMS), light normalization.  
-3. **Embed** with **HuBERT** (mean-pool across time) → L2-normalized vector.  
-4. **Compare** to each word’s profile (**centroid**) and accept only if:  
-   - Best distance is within that word’s **confidence threshold**, and  
-   - It’s clearly better than the **second best** (margin/ratio check).  
-   → reduces false matches and stabilizes decisions.
+1. **Record** a fixed window (default 2.0s).  
+2. **Preprocess**: trim silence; reject too‑quiet windows by **RMS threshold** (sensitivity).  
+3. **Embed** with **HuBERT** (mean‑pool, L2‑normalize).  
+4. **Compare** to each label’s **centroid** using **cosine distance** and accept only if `dist ≤ τ` (adaptive per‑label threshold).
 
 ---
 
@@ -136,7 +89,7 @@ python app.py add-word --child 1 --label "מים" -n 5 --rms-min 0.002
 Per-child file: `child_<id>.json`
 ```json
 {
-  "version": "simple-1.2",
+  "version": "simple-1.0",
   "model": "facebook/hubert-base-ls960",
   "child_id": "1",
   "words": [
@@ -149,35 +102,23 @@ Per-child file: `child_<id>.json`
   ]
 }
 ```
-- `vectors`: raw training embeddings (per sample)  
-- `centroid`: per-word profile (mean vector, normalized)  
-- `tau`: dynamic confidence threshold for this word
 
 ---
 
 ## 🧰 Troubleshooting
-- **No output while listening** → speak a bit louder or try `--sensitivity ultra` / `--rms-min 0.002`.  
-  You can also increase window: `--seconds 2.5`.  
-- **Everything matches one word** → add more clean samples for that word or re-record with `--reset-first` (5–7 examples per word usually stabilizes thresholds).  
-- **Device/sample-rate errors (Linux)** → ensure `libportaudio2` and `libsndfile1` are installed; choose a specific `--device` index if needed.  
-- **Hebrew/Unicode on Windows** → use a modern PowerShell or `chcp 65001`.
-
----
-
-## 🔐 Privacy & Hebrew Usage
-- This repository’s docs and flows target **Hebrew caregiving contexts**; labels/examples and CLI output are in Hebrew.  
-- All audio/embeddings are **local by default**. No cloud calls during inference.
+- **No detections** → speak slightly louder; try `--sensitivity ultra` or lower `--rms-min` (e.g., `0.002`).  
+- **Many false positives** → add more clean samples for each label (`-n 5` or more).  
+- **Device errors (Linux)** → ensure `libportaudio2`/`libsndfile1`; pick a `--device` index.
 
 ---
 
 ## 🏷️ License
-**Proprietary — All Rights Reserved.**  
-This repository is for **view-only**. Any use beyond viewing requires **explicit written permission** from the copyright
-holder. See **LICENSE** and **NOTICE**.
+**Proprietary — All Rights Reserved.** View‑only. Any use beyond viewing requires explicit written permission.  
+See **LICENSE** and **NOTICE**.
 
 ---
 
 ## © Acknowledgements
-**HuBERT Base LS-960** (HuggingFace: `facebook/hubert-base-ls960`) · PyTorch · Transformers · librosa · sounddevice · soundfile
+HuBERT Base LS‑960 (HuggingFace: `facebook/hubert-base-ls960`) · PyTorch · Transformers · librosa · sounddevice
 
 © 2025 Itzik Galanti. All rights reserved.
