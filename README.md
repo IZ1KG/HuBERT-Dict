@@ -1,22 +1,24 @@
 # HuBERT-Dict — Personal Sound Dictionary (Assistive AI)
 
-> ⚠️ **View-Only / Proprietary — All Rights Reserved**  
-> This repository is provided **for viewing and evaluation only**.  
-> **No permission** is granted to copy, use, modify, merge, publish, distribute, or sublicense any part of this code without prior written consent from the author. See **LICENSE** and **NOTICE**.
+> ⚠️ **View-Only / Personal Use — No Modification / No Redistribution**  
+> This repository is provided **for viewing and personal/evaluation use only**.  
+> You may **not** copy (beyond what’s required to run locally), modify, fork, distribute, sublicense, sell,
+> or provide this software as a service. See **LICENSE** and **NOTICE**.
 
 > **Language note (Hebrew-first):** This project is configured and documented primarily for **Hebrew** usage (labels, examples, CLI output).  
 > The acoustic matcher itself is language-agnostic, but provided flows and examples target **Hebrew caregiving contexts**.
 
+
+
 ---
 
 ## ✨ What this build includes
-This README matches the **minimal CLI** in `app.py` you shared:
+This README matches the **minimal CLI** in `app.py`:
 - `add-word` — record N short examples for a label and build/update its profile
 - `listen` — continuous fixed-window listening and classification
 - Default window: **2.0s**; default mic sensitivity: **high**
-- Per‑child JSON auto‑created as `child_<id>.json` (no folders to set up)
+- Per-child JSON auto-created as `child_<id>.json`
 
-> Not included in this build: voice‑trigger / pre‑roll, list/delete commands, unknown logging.  
 > JSON version used here: **simple-1.0**.
 
 ---
@@ -24,7 +26,7 @@ This README matches the **minimal CLI** in `app.py` you shared:
 ## 🔧 Requirements
 - **Python 3.9+**
 - Python packages: `torch`, `transformers`, `librosa`, `sounddevice`, `numpy`  
-  (Optional but harmless in `requirements.txt`: `soundfile`)
+  (Optional in `requirements.txt`: `soundfile`)
 
 Linux audio backend (if needed):
 ```bash
@@ -79,9 +81,9 @@ Options:
 
 ## 🧠 How It Works (high level)
 1. **Record** a fixed window (default 2.0s).  
-2. **Preprocess**: trim silence; reject too‑quiet windows by **RMS threshold** (sensitivity).  
-3. **Embed** with **HuBERT** (mean‑pool, L2‑normalize).  
-4. **Compare** to each label’s **centroid** using **cosine distance** and accept only if `dist ≤ τ` (adaptive per‑label threshold).
+2. **Preprocess**: trim silence; reject too-quiet windows by **RMS threshold** (sensitivity).  
+3. **Embed** with **HuBERT** (mean-pool, L2-normalize).  
+4. **Compare** to each label’s **centroid** using **cosine distance** and accept only if `dist ≤ τ` (adaptive per-label threshold).
 
 ---
 
@@ -112,13 +114,20 @@ Per-child file: `child_<id>.json`
 
 ---
 
+## 🔐 Privacy & Language
+- Docs and examples are **Hebrew-first**; the matcher is language-agnostic.  
+- All audio/embeddings are **local by default**. No cloud calls during inference.
+
+---
+
 ## 🏷️ License
-**Proprietary — All Rights Reserved.** View‑only. Any use beyond viewing requires explicit written permission.  
-See **LICENSE** and **NOTICE**.
+**Personal Use — No Modification / No Redistribution.**  
+You are granted a limited license to **install and use** this software for your **own internal/evaluation** purposes.  
+You may **not** copy (beyond what is necessary to run it locally), modify, fork, distribute, sublicense, sell, or provide it as a service. See **LICENSE** and **NOTICE**.
 
 ---
 
 ## © Acknowledgements
-HuBERT Base LS‑960 (HuggingFace: `facebook/hubert-base-ls960`) · PyTorch · Transformers · librosa · sounddevice
+HuBERT Base LS-960 (HuggingFace: `facebook/hubert-base-ls960`) · PyTorch · Transformers · librosa · sounddevice
 
 © 2025 Itzik Galanti. All rights reserved.
